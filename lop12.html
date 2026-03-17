@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khối 12 - Toán Thầy Trung</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0a192f; color: #ccd6f6; font-family: 'Poppins', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 800px; width: 100%; background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        h1 { color: #64ffda; text-align: center; margin-bottom: 20px; }
+        .btn-back { display: inline-block; color: #64ffda; text-decoration: none; margin-bottom: 20px; font-size: 0.9em; }
+        .btn-back:hover { text-decoration: underline; }
+        
+        /* Danh sách học liệu */
+        .resource-list { display: grid; gap: 15px; margin-top: 20px; }
+        .resource-item { 
+            background: #112240; padding: 20px; border-radius: 10px; 
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s;
+        }
+        .resource-item:hover { border-color: #64ffda; transform: translateX(10px); }
+        .resource-info h3 { color: #fff; margin-bottom: 5px; font-size: 1.1em; }
+        .resource-info p { font-size: 0.8em; opacity: 0.7; }
+        .btn-download { 
+            background: #64ffda; color: #0a192f; padding: 8px 15px; 
+            border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
+        <h1>Tài liệu Ôn thi Khối 12</h1>
+        <p style="text-align: center; opacity: 0.8;">Các em tải tài liệu và xem video hướng dẫn bên dưới nhé.</p>
+
+        <div class="resource-list">
+            <div class="resource-item">
+                <div class="resource-info">
+                    <h3>Chuyên đề 1: Ứng dụng đạo hàm</h3>
+                    <p>File PDF - Tóm tắt lý thuyết và bài tập</p>
+                </div>
+                <a href="#" class="btn-download">Tải về</a>
+            </div>
+
+            <div class="resource-item">
+                <div class="resource-item">
+                <div class="resource-info">
+                    <h3>Chuyên đề 2: Khối đa diện</h3>
+                    <p>Video bài giảng tương tác (iSpring)</p>
+                </div>
+                <a href="#" class="btn-download">Xem bài giảng</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
