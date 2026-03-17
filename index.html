@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toán Thầy Trung - Cá nhân hóa học tập</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f8ff; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #0056b3; }
+        #countdown { font-size: 24px; font-weight: bold; color: #d9534f; margin: 20px 0; padding: 10px; border: 2px dashed #d9534f; border-radius: 10px; display: inline-block; }
+        .menu-lop { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+        .btn-lop { padding: 10px 20px; border: none; border-radius: 5px; background: #007bff; color: white; cursor: pointer; transition: 0.3s; }
+        .btn-lop:hover { background: #0056b3; }
+        .footer { margin-top: 50px; font-size: 0.9em; color: #777; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Chào mừng các em đến với lớp Toán Thầy Trung</h1>
+    <p><i>Trường THPT Số 1 Tư Nghĩa</i></p>
+
+    <div id="countdown">Đang tải đồng hồ...</div>
+
+    <div class="menu-lop">
+        <button class="btn-lop">Khối 10</button>
+        <button class="btn-lop">Khối 11</button>
+        <button class="btn-lop">Khối 12</button>
+    </div>
+
+    <div style="margin-top: 30px; text-align: left; background: #e9ecef; padding: 15px; border-radius: 8px;">
+        <h3>Thông báo mới:</h3>
+        <ul>
+            <li>Học sinh xem lại bài giảng về Đạo hàm tại mục Khối 11.</li>
+            <li>Luyện tập công thức: \( \sin^2 x + \cos^2 x = 1 \)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="footer">GV. Nguyễn Phỉ Đức Trung - 25 năm tâm huyết với nghề Toán</div>
+
+<script>
+    // Cài đặt ngày đích (Ví dụ: Thi THPT 2026 - Bạn có thể đổi ngày tại đây)
+    const countDownDate = new Date("Jun 26, 2026 07:30:00").getTime();
+
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML = "Đếm ngược kỳ thi: " + days + " ngày " + hours + " giờ " + minutes + " phút " + seconds + " giây ";
+
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "CHÚC CÁC EM THI TỐT!";
+        }
+    }, 1000);
+</script>
+
+</body>
+</html>
