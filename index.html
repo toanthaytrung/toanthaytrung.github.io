@@ -4,65 +4,123 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toán Thầy Trung - Cá nhân hóa học tập</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #f0f8ff; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h1 { color: #0056b3; }
-        #countdown { font-size: 24px; font-weight: bold; color: #d9534f; margin: 20px 0; padding: 10px; border: 2px dashed #d9534f; border-radius: 10px; display: inline-block; }
-        .menu-lop { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-        .btn-lop { padding: 10px 20px; border: none; border-radius: 5px; background: #007bff; color: white; cursor: pointer; transition: 0.3s; }
-        .btn-lop:hover { background: #0056b3; }
-        .footer { margin-top: 50px; font-size: 0.9em; color: #777; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        /* Nền đẹp, chuyển màu và hiệu ứng hạt nổi */
+        body { 
+            background: linear-gradient(135deg, #1e3a8a, #4f46e5, #9333ea); 
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            color: white; padding: 20px; display: flex; flex-direction: column; align-items: center; position: relative; overflow-x: hidden;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        /* Hiệu ứng hạt nền */
+        .circles{ position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1; }
+        .circles li{ position: absolute; display: block; list-style: none; width: 20px; height: 20px; background: rgba(255, 255, 255, 0.2); animation: animate 25s linear infinite; bottom: -150px; border-radius: 50%;}
+        .circles li:nth-child(1){ left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .circles li:nth-child(2){ left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .circles li:nth-child(3){ left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .circles li:nth-child(4){ left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .circles li:nth-child(5){ left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .circles li:nth-child(6){ left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        @keyframes animate { 0%{ transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; } 100%{ transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; } }
+        /* Khung kính mờ (Glassmorphism) */
+        .container { max-width: 900px; width: 100%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2); box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2); }
+        h1 { font-size: 2.5em; font-weight: 700; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 5px;}
+        p.sub-title { font-size: 1.1em; font-weight: 300; opacity: 0.8; margin-bottom: 25px; font-style: italic;}
+        /* Đồng hồ đếm ngược lung linh */
+        #countdown-container { margin: 30px 0; padding: 15px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);}
+        #countdown { font-size: 1.8em; font-weight: 700; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.7); }
+        /* Khung các khối lớp xếp hàng ngang (Card nổi) */
+        .khối-classes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; margin-bottom: 40px;}
+        .card-khối { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 25px; cursor: pointer; transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease; text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center;}
+        .card-khối i { font-size: 3em; color: #fff; opacity: 0.9; margin-bottom: 15px; }
+        .card-khối h2 { font-size: 1.5em; font-weight: 500; margin-bottom: 10px; }
+        .card-khối p { font-size: 0.9em; opacity: 0.7; font-weight: 300; }
+        /* Hiệu ứng nổi và đổi màu khi di chuột */
+        .card-khối:hover { transform: translateY(-10px); background: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .card-khối.lop10:hover i { color: #4ade80; } /* Màu xanh lá khi hover khối 10 */
+        .card-khối.lop11:hover i { color: #60a5fa; } /* Màu xanh dương khi hover khối 11 */
+        .card-khối.lop12:hover i { color: #f472b6; } /* Màu hồng khi hover khối 12 */
+        /* Thông báo nhỏ phía dưới */
+        .notice-box { text-align: left; background: rgba(0, 0, 0, 0.15); padding: 20px; border-radius: 10px; border-left: 4px solid #fff;}
+        .notice-box h3 { margin-bottom: 10px; }
+        .notice-box ul { list-style-position: inside; }
+        .notice-box li { margin-bottom: 5px; font-weight: 300;}
+        .footer { margin-top: 50px; font-size: 0.9em; opacity: 0.6; padding-bottom: 20px; font-weight: 300;}
+        /* Mobile responsive */
+        @media (max-width: 600px) { h1 { font-size: 1.8em; } .khối-classes-grid { grid-template-columns: 1fr; } .container { padding: 20px; } }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Chào mừng các em đến với lớp Toán Thầy Trung TN1</h1>
-    <p><i>Trường THPT Số 1 Tư Nghĩa</i></p>
+    <ul class="circles"><li></li><li></li><li></li><li></li><li></li><li></li></ul>
 
-    <div id="countdown">Đang tải đồng hồ...</div>
+    <div class="container">
+        <i class="fas fa-graduation-cap" style="font-size: 3em; margin-bottom: 15px; opacity: 0.8;"></i>
+        <h1>Chào mừng các em đến với lớp Toán Thầy Trung</h1>
+        <p class="sub-title">Trường THPT Số 1 Tư Nghĩa</p>
 
-    <div class="menu-lop">
-        <button class="btn-lop">Khối 10</button>
-        <button class="btn-lop">Khối 11</button>
-        <button class="btn-lop">Khối 12</button>
+        <div id="countdown-container">
+            <div id="countdown">Đang tải đồng hồ...</div>
+        </div>
+
+        <div class="khối-classes-grid">
+            <a href="#" class="card-khối lop10">
+                <i class="fas fa-calculator"></i>
+                <h2>Khối 10</h2>
+                <p>Nền tảng vững chắc</p>
+            </a>
+            <a href="#" class="card-khối lop11">
+                <i class="fas fa-function"></i>
+                <h2>Khối 11</h2>
+                <p>Tăng tốc về đích</p>
+            </a>
+            <a href="#" class="card-khối lop12">
+                <i class="fas fa-compass-drafting"></i>
+                <h2>Khối 12</h2>
+                <p>Vượt vũ môn hóa rồng</p>
+            </a>
+        </div>
+
+        <div class="notice-box">
+            <h3><i class="fas fa-bullhorn" style="margin-right: 10px;"></i>Thông báo mới:</h3>
+            <ul>
+                <li>Khối 12: Xem lại bài giảng về Khối đa diện tại mục Khối 12.</li>
+                <li>Học sinh lớp 11A1 làm bài kiểm tra 15 phút trực tuyến tối nay.</li>
+                <li>Hôm nay ôn tập công thức: \( \int x^n \, dx = \frac{x^{n+1}}{n+1} + C \)</li>
+            </ul>
+        </div>
     </div>
 
-    <div style="margin-top: 30px; text-align: left; background: #e9ecef; padding: 15px; border-radius: 8px;">
-        <h3>Thông báo mới:</h3>
-        <ul>
-            <li>Học sinh xem lại bài giảng về Đạo hàm tại mục Khối 11.</li>
-            <li>Luyện tập công thức: \( \sin^2 x + \cos^2 x = 1 \)</li>
-        </ul>
-    </div>
-</div>
+    <div class="footer">GV. Nguyễn Phỉ Đức Trung - 25 năm tâm huyết với nghề Toán</div>
 
-<div class="footer">GV. Nguyễn Phỉ Đức Trung - 25 năm tâm huyết với nghề Toán</div>
+    <script>
+        // Cài đặt ngày đích chính xác: Thi THPT 10/06/2026 (Tháng 6 là số 5 trong JS)
+        const countDownDate = new Date(2026, 5, 10, 7, 30, 0).getTime();
 
-<script>
-    // Cài đặt ngày đích (Ví dụ: Thi THPT 2026 - Bạn có thể đổi ngày tại đây)
-   const countDownDate = new Date(2026, 5, 10, 7, 30, 0).getTime();
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
 
-    const x = setInterval(function() {
-        const now = new Date().getTime();
-        const distance = countDownDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("countdown").innerHTML = "<i class='fas fa-stopwatch' style='margin-right: 10px;'></i>Đếm ngược kỳ thi: " + days + " ngày " + hours + " giờ " + minutes + " phút " + seconds + " giây ";
 
-        document.getElementById("countdown").innerHTML = "Đếm ngược kỳ thi: " + days + " ngày " + hours + " giờ " + minutes + " phút " + seconds + " giây ";
-
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("countdown").innerHTML = "CHÚC CÁC EM THI TỐT!";
-        }
-    }, 1000);
-</script>
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown").innerHTML = "CHÚC CÁC EM THI TỐT!";
+            }
+        }, 1000);
+    </script>
 
 </body>
 </html>
