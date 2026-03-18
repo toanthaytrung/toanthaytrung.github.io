@@ -3,96 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toán Thầy Trung - Khối 12</title>
+    <title>Toán 12 - Thầy Trung</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;450;600&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #0a192f; --container-bg: #112240; --text-main: #ccd6f6; --accent: #64ffda; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 600px; width: 100%; background: var(--container-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #233554; }
-        h1 { color: var(--accent); text-align: center; font-size: 1.8em; margin-bottom: 25px; }
+        :root { --bg: #0a192f; --card: #112240; --accent: #64ffda; --text: #ccd6f6; --white: #ffffff; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 800px; width: 100%; }
+        h1 { color: var(--accent); text-align: center; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
         
-        /* Phần tra cứu điểm */
-        .search-box { background: #1d3557; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; }
-        input { width: 80%; padding: 12px; border-radius: 5px; border: none; outline: none; font-size: 16px; margin-bottom: 10px; }
-        button { background: var(--accent); color: #0a192f; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #fff; transform: translateY(-2px); }
-        #result { margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(100, 255, 218, 0.1); display: none; border: 1px dashed var(--accent); text-align: left; }
-        .res-item { margin-bottom: 8px; }
-        .res-label { font-weight: bold; color: var(--accent); }
+        /* Khu vực tra cứu */
+        .search-box { background: var(--card); padding: 30px; border-radius: 15px; border: 1px solid #233554; margin-bottom: 30px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .search-box input { width: 80%; padding: 12px; border-radius: 8px; border: 1px solid #233554; background: #0a192f; color: white; font-size: 1.1em; text-align: center; margin-bottom: 15px; outline: none; }
+        .search-box button { background: var(--accent); color: #0a192f; border: none; padding: 12px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .search-box button:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        /* Danh sách tài liệu và thi thử */
-        .topic-list { margin-top: 20px; }
-        .topic-item { background: #1d3557; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
-        .topic-item h3 { margin: 0; font-size: 1em; color: #fff; }
-        .btn-download { background: #233554; color: var(--accent); text-decoration: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em; border: 1px solid var(--accent); transition: 0.3s; }
-        .btn-download:hover { background: var(--accent); color: #0a192f; }
+        /* Bảng kết quả tra cứu */
+        #result-area { margin-top: 20px; display: none; }
+        .result-table { width: 100%; border-collapse: collapse; background: #0a192f; border-radius: 10px; overflow: hidden; }
+        .result-table th { background: #233554; color: var(--accent); padding: 12px; text-align: left; }
+        .result-table td { padding: 12px; border-bottom: 1px solid #233554; color: var(--white); }
+
+        /* Danh sách bài học */
+        .topic-list { display: grid; gap: 20px; }
+        .topic-item { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid #233554; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .topic-item:hover { border-color: var(--accent); transform: translateX(5px); }
+        .topic-info h3 { margin: 0; color: var(--white); font-size: 1.1em; }
+        .topic-info p { margin: 5px 0 0; font-size: 0.85em; color: #8892b0; }
+        .btn-link { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9em; transition: 0.3s; }
+        .btn-link:hover { background: var(--accent); color: #0a192f; }
         
-        .loading { display: none; color: var(--accent); margin-top: 10px; font-style: italic; }
+        .footer { margin-top: 50px; text-align: center; font-size: 0.8em; color: #495670; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>TOÁN 12 - THẦY TRUNG</h1>
+    <h1>Toán 12 - Thầy Trung</h1>
 
     <div class="search-box">
         <p style="margin-top:0">Tra cứu kết quả học tập</p>
-        <input type="text" id="studentID" placeholder="Nhập mã số của em (VD: 1201)">
-        <button onclick="traCuu()">Xem kết quả</button>
-        <div id="loading" class="loading">Đang tìm kiếm dữ liệu...</div>
-        <div id="result"></div>
+        <input type="text" id="studentCode" placeholder="Nhập mã số học sinh (VD: 1201)">
+        <br>
+        <button onclick="traCuuDiem()">XEM KẾT QUẢ</button>
+        
+        <div id="result-area">
+            </div>
     </div>
 
     <div class="topic-list">
-        
         <div class="topic-item">
-            <h3>Chuyên đề: Ứng dụng Tích phân</h3>
-           <a href="https://drive.google.com/file/d/1q98V2RXYcZUXiBzFnAStCsPxBNeD8RQ3/view?usp=sharing" class="btn-download" target="_blank">Xem bài giảng</a>
-        </div>
-
-        <div class="topic-item" style="background: #112240; border: 1px solid var(--accent);">
-            <div>
-                <h3 style="color: var(--accent);">Thi Thử Trắc Nghiệm 2026</h3>
-                <p style="font-size: 0.8em; color: #8892b0; margin: 5px 0 0 0;">Cấu trúc chuẩn Bộ GD&ĐT</p>
+            <div class="topic-info">
+                <h3>Chuyên đề: Ứng dụng Tích phân</h3>
+                <p>Diện tích hình phẳng & Thể tích vật thể tròn xoay</p>
             </div>
-            <a href="thithu.html" class="btn-download" style="background: var(--accent); color: #0a192f;">VÀO THI</a>
+            <a href="https://drive.google.com/file/d/1q98V2RXYcZUXiBzFnAStCsPxBNeD8RQ3/view?usp=sharing" target="_blank" class="btn-link">Xem bài giảng</a>
         </div>
 
-    </div>
+        <div class="topic-item" style="border-color: var(--accent); background: #1d2d50;">
+            <div class="topic-info">
+                <h3 style="color: var(--accent);">Thi Thử Trắc Nghiệm 2026</h3>
+                <p>Cấu trúc chuẩn Bộ GD&ĐT (90 phút)</p>
+            </div>
+            <a href="thithu.html" class="btn-link" style="background: var(--accent); color: #0a192f; font-weight: bold;">VÀO THI</a>
+        </div>
+        
+        </div>
 
-    <button onclick="location.href='index.html'" style="margin-top: 25px; background:none; color:#8892b0; border:1px solid #233554; width:100%">Quay lại Trang chủ</button>
+    <div class="footer">
+        &copy; 2025 Hệ thống học tập trực tuyến - Thầy Trung Toán
+    </div>
 </div>
 
 <script>
-  async function traCuuDiem() {
-    const maso = document.getElementById('studentCodeLookup').value.trim();
-    if (!maso) return alert("Em nhập mã số cần tra cứu nhé!");
+    // --- CẤU HÌNH TRA CỨU ---
+    // QUAN TRỌNG: Thầy dán link Web App mới từ Apps Script vào đây
+    const SCRIPT_URL = "DÁN_LINK_WEB_APP_MỚI_CỦA_THẦY_VÀO_ĐÂY";
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxslRnd9U_nSDBZspa4hubAl-CJ0_WJVA9F-vOzCJAwm_feKTIzdFdXHNmod76ib81G/exec"; // Link Apps Script vừa Deploy
-
-    try {
-        const response = await fetch(`${SCRIPT_URL}?maso=${maso}`);
-        const history = await response.json();
-
-        if (history.length === 0) {
-            alert("Không tìm thấy dữ liệu thi của mã số: " + maso);
+    async function traCuuDiem() {
+        const maso = document.getElementById('studentCode').value.trim();
+        const resultArea = document.getElementById('result-area');
+        
+        if (!maso) {
+            alert("Em vui lòng nhập mã số học sinh!");
             return;
         }
 
-        // Hiển thị kết quả ra màn hình (Ví dụ vào một thẻ div có id là 'result-area')
-        let html = `<h3>Kết quả của mã số ${maso}:</h3><table border="1" style="width:100%; border-collapse: collapse;">
-                    <tr><th>Ngày thi</th><th>Điểm số</th></tr>`;
-        history.forEach(item => {
-            html += `<tr><td>${item.thoigian}</td><td>${item.diem}</td></tr>`;
-        });
-        html += `</table>`;
-        
-        document.getElementById('result-area').innerHTML = html; // Đảm bảo thầy có <div id="result-area"></div> trong HTML
+        resultArea.style.display = 'block';
+        resultArea.innerHTML = "<p style='color: var(--accent)'>Đang tải dữ liệu từ Sheets...</p>";
 
-    } catch (e) {
-        alert("Lỗi hệ thống tra cứu! Thầy hãy kiểm tra lại Link Script.");
+        try {
+            // Gọi lên Google Sheets để lấy lịch sử thi
+            const response = await fetch(`${SCRIPT_URL}?maso=${maso}`);
+            const history = await response.json();
+
+            if (history.length === 0) {
+                resultArea.innerHTML = `<p style="color: #ef4444">Không tìm thấy lịch sử thi cho mã số ${maso}. Em hãy kiểm tra lại mã hoặc tham gia thi thử nhé!</p>`;
+                return;
+            }
+
+            // Tạo bảng hiển thị kết quả
+            let tableHtml = `
+                <p style="text-align: left; color: var(--accent); margin-top: 20px;">Lịch sử thi của em:</p>
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày làm bài</th>
+                            <th>Điểm số</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            history.forEach(item => {
+                tableHtml += `
+                    <tr>
+                        <td>${item.thoigian}</td>
+                        <td style="font-weight: bold; color: var(--accent)">${item.diem}</td>
+                    </tr>
+                `;
+            });
+
+            tableHtml += `</tbody></table>`;
+            resultArea.innerHTML = tableHtml;
+
+        } catch (error) {
+            console.error(error);
+            resultArea.innerHTML = `<p style="color: #ef4444">Lỗi kết nối máy chủ! Thầy chưa dán đúng Link Script hoặc chưa Deploy chế độ 'Anyone'.</p>`;
+        }
     }
-}
 </script>
 
 </body>
