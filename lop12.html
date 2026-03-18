@@ -64,51 +64,35 @@
 </div>
 
 <script>
-    function traCuu() {
-        const maso = document.getElementById('studentID').value;
-        const loading = document.getElementById('loading');
-        const resultDiv = document.getElementById('result');
-        // Link Apps Script của thầy
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxslRnd9U_nSDBZspa4hubAl-CJ0_WJVA9F-vOzCJAwm_feKTIzdFdXHNmod76ib81G/exec";
+  async function traCuuDiem() {
+    const maso = document.getElementById('studentCodeLookup').value.trim();
+    if (!maso) return alert("Em nhập mã số cần tra cứu nhé!");
 
-        if (!maso) {
-            alert("Em vui lòng nhập mã số!");
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxslRnd9U_nSDBZspa4hubAl-CJ0_WJVA9F-vOzCJAwm_feKTIzdFdXHNmod76ib81G/exec"; // Link Apps Script vừa Deploy
+
+    try {
+        const response = await fetch(`${SCRIPT_URL}?maso=${maso}`);
+        const history = await response.json();
+
+        if (history.length === 0) {
+            alert("Không tìm thấy dữ liệu thi của mã số: " + maso);
             return;
         }
 
-        loading.style.display = 'block';
-        resultDiv.style.display = 'none';
+        // Hiển thị kết quả ra màn hình (Ví dụ vào một thẻ div có id là 'result-area')
+        let html = `<h3>Kết quả của mã số ${maso}:</h3><table border="1" style="width:100%; border-collapse: collapse;">
+                    <tr><th>Ngày thi</th><th>Điểm số</th></tr>`;
+        history.forEach(item => {
+            html += `<tr><td>${item.thoigian}</td><td>${item.diem}</td></tr>`;
+        });
+        html += `</table>`;
+        
+        document.getElementById('result-area').innerHTML = html; // Đảm bảo thầy có <div id="result-area"></div> trong HTML
 
-        fetch(`${scriptURL}?maso=${maso}`)
-            .then(response => response.json())
-            .then(data => {
-                loading.style.display = 'none';
-                if (data.status === "success") {
-                    let html = `<div class="res-item"><span class="res-label">Họ tên:</span> ${data.ten}</div>`;
-                    
-                    // Tự động quét qua tất cả các cột dữ liệu thầy thêm trong Sheets
-                    if (data.details) {
-                        for (let key in data.details) {
-                            html += `<div class="res-item"><span class="res-label">${key}:</span> ${data.details[key]}</div>`;
-                        }
-                    } else {
-                        // Trường hợp dùng code cũ chưa có details
-                        html += `<div class="res-item"><span class="res-label">Điểm:</span> ${data.diem}</div>`;
-                        html += `<div class="res-item"><span class="res-label">Nhận xét:</span> ${data.nhanxet}</div>`;
-                    }
-                    
-                    resultDiv.innerHTML = html;
-                    resultDiv.style.display = 'block';
-                } else {
-                    alert("Không tìm thấy mã số này trong danh sách lớp 12A1!");
-                }
-            })
-            .catch(error => {
-                loading.style.display = 'none';
-                alert("Lỗi kết nối! Em kiểm tra lại mạng nhé.");
-                console.error('Error!', error.message);
-            });
+    } catch (e) {
+        alert("Lỗi hệ thống tra cứu! Thầy hãy kiểm tra lại Link Script.");
     }
+}
 </script>
 
 </body>
