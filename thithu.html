@@ -3,20 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thi Thử Toán 2026 - Thầy Trung</title>
+    <title>Hệ Thống Thi Thử 2025 - Thầy Trung</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;450;600&display=swap" rel="stylesheet">
     
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            startup: {
-                ready: () => {
-                    MathJax.startup.defaultReady();
-                }
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
+            startup: { ready: () => { MathJax.startup.defaultReady(); } }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -24,76 +17,116 @@
     <style>
         :root { --bg: #0a192f; --card: #112240; --accent: #64ffda; --text: #ccd6f6; --white: #ffffff; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .exam-container { max-width: 900px; width: 100%; margin-bottom: 50px; }
-        header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--accent); padding-bottom: 20px; }
-        h1 { color: var(--accent); margin: 0; font-size: 2em; }
+        .exam-container { max-width: 900px; width: 100%; display: none; } /* Ẩn cho đến khi nhập mã */
+        
+        /* Form đăng nhập thi */
+        .login-box { background: var(--card); padding: 40px; border-radius: 15px; text-align: center; border: 1px solid var(--accent); margin-top: 50px; }
+        input[type="text"] { width: 100%; padding: 12px; margin: 15px 0; border-radius: 5px; border: 1px solid #233554; background: #0a192f; color: white; font-size: 1.1em; text-align: center; }
+        
+        /* Thanh trạng thái cố định */
+        .sticky-header { position: sticky; top: 0; background: rgba(10, 25, 47, 0.95); padding: 10px; border-bottom: 2px solid var(--accent); z-index: 100; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; }
+        .timer { font-size: 1.5em; font-weight: bold; color: var(--accent); }
+
         .section-header { background: #233554; color: var(--white); padding: 15px; border-radius: 8px; margin: 40px 0 20px; font-weight: 600; border-left: 5px solid var(--accent); }
-        .question-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #233554; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .question-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #233554; }
         .q-text { font-size: 1.1em; color: var(--white); margin-bottom: 20px; line-height: 1.6; }
+        
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .opt-btn { background: #0a192f; border: 1px solid #233554; color: var(--text); padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .opt-btn.selected { background: var(--accent); color: #0a192f; font-weight: 600; }
-        .tf-row { display: flex; justify-content: space-between; align-items: center; background: #0a192f; padding: 12px 20px; margin-top: 10px; border-radius: 8px; }
-        .tf-btn { border: 1px solid #233554; background: none; color: #8892b0; padding: 6px 12px; border-radius: 4px; cursor: pointer; min-width: 65px; }
-        .tf-btn.s-true { background: #22c55e; color: white; border-color: #22c55e; }
-        .tf-btn.s-false { background: #ef4444; color: white; border-color: #ef4444; }
-        .short-input { width: 100%; padding: 15px; background: #0a192f; border: 2px solid #233554; color: var(--accent); border-radius: 8px; outline: none; box-sizing: border-box; }
+        .opt-btn { background: #0a192f; border: 1px solid #233554; color: var(--text); padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; }
+        .opt-btn.selected { background: var(--accent); color: #0a192f; font-weight: bold; }
+        
+        .tf-row { display: flex; justify-content: space-between; align-items: center; background: #0a192f; padding: 10px; margin-top: 8px; border-radius: 5px; }
+        .tf-btn { border: 1px solid #233554; background: none; color: #8892b0; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
+        .tf-btn.s-true { background: #22c55e; color: white; }
+        .tf-btn.s-false { background: #ef4444; color: white; }
+
+        .short-input { width: 100%; padding: 12px; background: #0a192f; border: 1px solid var(--accent); color: white; border-radius: 5px; }
+        
         #submit-btn { width: 100%; padding: 20px; background: var(--accent); color: #0a192f; border: none; border-radius: 50px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 40px; }
-        .explanation { display: none; margin-top: 15px; padding: 15px; background: #0a192f; border-radius: 8px; color: #a8b2d1; border-left: 4px solid var(--accent); }
+        .explanation { display: none; margin-top: 15px; padding: 15px; background: #0a192f; border-left: 4px solid var(--accent); font-size: 0.9em; }
+        
         .score-board { display: none; background: var(--accent); color: #0a192f; padding: 30px; border-radius: 15px; text-align: center; margin-top: 40px; }
-        .score-num { font-size: 4.5em; font-weight: 800; margin: 0; }
-        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } .tf-row { flex-direction: column; align-items: flex-start; gap: 10px; } }
+        .score-num { font-size: 4em; font-weight: 800; margin: 0; }
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="exam-container">
-    <header>
-        <h1>TOÁN THẦY TRUNG</h1>
-        <p style="color: var(--accent); letter-spacing: 2px; font-weight: 600;">HỆ THỐNG THI THỬ TRẮC NGHIỆM 2025</p>
-    </header>
+<div id="login-box" class="login-box">
+    <h2 style="color: var(--accent)">HỆ THỐNG THI THỬ</h2>
+    <p>Nhập mã số học sinh để bắt đầu làm bài</p>
+    <input type="text" id="studentCode" placeholder="VD: 1201">
+    <button id="submit-btn" onclick="startExam()">BẮT ĐẦU THI</button>
+</div>
 
-    <div class="section-header">PHẦN I. Trắc nghiệm 4 lựa chọn (3.0 điểm)</div>
+<div id="exam-container" class="exam-container">
+    <div class="sticky-header">
+        <div id="user-info" style="font-weight: bold;">Mã số: <span id="displayCode"></span></div>
+        <div class="timer" id="timer">90:00</div>
+    </div>
+
+    <div class="section-header">PHẦN I. Câu trắc nghiệm 4 lựa chọn (3.0 điểm)</div>
     <div id="p1-content"></div>
 
-    <div class="section-header">PHẦN II. Trắc nghiệm Đúng/Sai (4.0 điểm)</div>
+    <div class="section-header">PHẦN II. Câu trắc nghiệm Đúng/Sai (4.0 điểm)</div>
     <div id="p2-content"></div>
 
-    <div class="section-header">PHẦN III. Trả lời ngắn (3.0 điểm)</div>
+    <div class="section-header">PHẦN III. Câu trắc nghiệm trả lời ngắn (3.0 điểm)</div>
     <div id="p3-content"></div>
 
-    <button id="submit-btn" onclick="chamDiem()">NỘP BÀI VÀ XEM ĐÁP ÁN</button>
+    <button id="submit-btn" onclick="chamDiem()">NỘP BÀI THI</button>
 
     <div id="score-board" class="score-board">
+        <h3>KẾT QUẢ CỦA EM</h3>
         <h2 class="score-num" id="final-score">0.00</h2>
         <p id="score-detail"></p>
-        <button onclick="window.location.reload()" style="background:#0a192f; color:white; border:none; padding:10px 20px; border-radius:5px; margin-top:15px; cursor:pointer;">Làm lại đề</button>
+        <p id="notice-msg" style="font-weight: bold; color: #d00000;"></p>
+        <button onclick="location.href='lop12.html'" style="padding: 10px 20px; cursor: pointer;">Quay lại</button>
     </div>
 </div>
 
 <script>
+    // --- CẤU HÌNH TỪ GIÁO VIÊN ---
+    const config = {
+        timeLimit: 90 * 60, // 90 phút (giây)
+        choXemDapAn: false, // Thầy đổi thành TRUE khi muốn hiện lời giải
+        maxAttempts: 1      // Số lần làm bài (hiện tại demo logic)
+    };
+
     const p1Data = [
-        { q: "Câu 1: Hàm số $y=x^3-3x+2$ đạt cực đại tại $x$ bằng:", opts: ["$1$","$-1$","$2$","$0$"], a: 1, exp: "$y'=3x^2-3=0 \\Leftrightarrow x=\\pm 1$. Cực đại tại $x=-1$." },
-        { q: "Câu 2: Tiệm cận ngang của $y=\\frac{2x-1}{x+1}$ là:", opts: ["$y=2$","$y=-1$","$x=-1$","$y=1$"], a: 0, exp: "$\lim_{x \to \infty} y = 2$." }
+        { q: "Câu 1: Hàm số $y=x^3-3x+2$ đạt cực đại tại:", opts: ["$x=1$","$x=-1$","$x=2$","$x=0$"], a: 1, exp: "Đạo hàm $y'=3x^2-3=0 \\Leftrightarrow x=\\pm 1$. Bảng biến thiên cho thấy cực đại tại $x=-1$." }
     ];
-
     const p2Data = [
-        { 
-            q: "Câu 1: Cho hàm số $f(x) = x^4 - 2x^2 + 3$. Xét tính đúng sai:",
-            subs: ["Hàm số có 3 điểm cực trị","Giá trị cực tiểu bằng 3","Đồng biến trên $(0; 1)$","Nhận Oy làm trục đối xứng"],
-            a: [true, false, false, true],
-            exp: "Cực tiểu $f(\pm 1)=2$. Nghịch biến trên $(0; 1)$."
-        }
+        { q: "Câu 1: Cho hàm số $f(x) = x^4 - 2x^2 + 3$.", subs: ["Hàm số có 3 cực trị","Giá trị cực tiểu bằng 3","Hàm số chẵn","Đồng biến trên $(0;1)$"], a: [true, false, true, false], exp: "Cực tiểu là $f(\\pm 1)=2$. Hàm số chẵn vì $f(x)=f(-x)$." }
     ];
-
     const p3Data = [
-        { q: "Câu 1: Thể tích khối hộp chữ nhật kích thước $2; 3; 5$ là:", a: "30", exp: "$V = 2.3.5 = 30$." }
+        { q: "Câu 1: Thể tích khối hộp chữ nhật kích thước 2, 3, 5 bằng bao nhiêu?", a: "30", exp: "$V = 2 \\times 3 \\times 5 = 30$." }
     ];
 
-    function typesetMath() {
-        if (window.MathJax && MathJax.typesetPromise) {
-            MathJax.typesetPromise().catch(e => console.log(e));
-        }
+    let timerInterval;
+    let timeLeft = config.timeLimit;
+    let userP1 = {}, userP2 = {};
+
+    function startExam() {
+        const code = document.getElementById('studentCode').value;
+        if(!code) { alert("Em chưa nhập mã số!"); return; }
+        
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('exam-container').style.display = 'block';
+        document.getElementById('displayCode').innerText = code;
+        
+        renderQuiz();
+        startTimer();
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            if(timeLeft <= 0) { clearInterval(timerInterval); chamDiem(); }
+            timeLeft--;
+        }, 1000);
     }
 
     function renderQuiz() {
@@ -102,67 +135,52 @@
                 <div class="q-text">${d.q}</div>
                 <div class="options-grid">${d.opts.map((o, oi) => `<div class="opt-btn" onclick="selP1(${i},${oi},this)">${o}</div>`).join('')}</div>
                 <div class="explanation" id="exp-p1-${i}">${d.exp}</div>
-            </div>
-        `).join('');
-
+            </div>`).join('');
         document.getElementById('p2-content').innerHTML = p2Data.map((d, i) => `
             <div class="question-card">
                 <div class="q-text">${d.q}</div>
-                ${d.subs.map((s, si) => `
-                    <div class="tf-row">
-                        <span>${String.fromCharCode(97+si)}. ${s}</span>
-                        <div class="tf-btns">
-                            <button class="tf-btn" onclick="selP2(${i},${si},true,this)">Đúng</button>
-                            <button class="tf-btn" onclick="selP2(${i},${si},false,this)">Sai</button>
-                        </div>
-                    </div>
-                `).join('')}
+                ${d.subs.map((s, si) => `<div class="tf-row"><span>${s}</span><div class="tf-btns">
+                    <button class="tf-btn" onclick="selP2(${i},${si},true,this)">Đúng</button>
+                    <button class="tf-btn" onclick="selP2(${i},${si},false,this)">Sai</button>
+                </div></div>`).join('')}
                 <div class="explanation" id="exp-p2-${i}">${d.exp}</div>
-            </div>
-        `).join('');
-
+            </div>`).join('');
         document.getElementById('p3-content').innerHTML = p3Data.map((d, i) => `
             <div class="question-card">
                 <div class="q-text">${d.q}</div>
                 <input type="text" class="short-input" id="ans-p3-${i}" placeholder="Đáp số...">
                 <div class="explanation" id="exp-p3-${i}">${d.exp}</div>
-            </div>
-        `).join('');
-        typesetMath();
+            </div>`).join('');
+        if(window.MathJax) MathJax.typeset();
     }
 
-    let userP1 = {}, userP2 = {};
-    function selP1(q, o, btn) {
-        userP1[q] = o;
-        Array.from(btn.parentElement.children).forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-    }
-    function selP2(q, s, v, btn) {
-        if(!userP2[q]) userP2[q] = {};
-        userP2[q][s] = v;
-        Array.from(btn.parentElement.children).forEach(b => { b.classList.remove('s-true'); b.classList.remove('s-false'); });
-        btn.classList.add(v ? 's-true' : 's-false');
-    }
+    function selP1(q, o, btn) { userP1[q] = o; Array.from(btn.parentElement.children).forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
+    function selP2(q, s, v, btn) { if(!userP2[q]) userP2[q] = {}; userP2[q][s] = v; Array.from(btn.parentElement.children).forEach(b => { b.classList.remove('s-true'); b.classList.remove('s-false'); }); btn.classList.add(v ? 's-true' : 's-false'); }
 
     function chamDiem() {
+        clearInterval(timerInterval);
         let s1 = 0, s2 = 0, s3 = 0;
-        p1Data.forEach((d, i) => { if(userP1[i] === d.a) s1 += 0.25; document.getElementById(`exp-p1-${i}`).style.display = 'block'; });
+
+        p1Data.forEach((d, i) => { if(userP1[i] === d.a) s1 += 0.25; });
         p2Data.forEach((d, i) => {
             let count = 0;
             d.a.forEach((ans, si) => { if(userP2[i] && userP2[i][si] === ans) count++; });
             if(count === 1) s2 += 0.1; else if(count === 2) s2 += 0.25; else if(count === 3) s2 += 0.5; else if(count === 4) s2 += 1.0;
-            document.getElementById(`exp-p2-${i}`).style.display = 'block';
         });
-        p3Data.forEach((d, i) => { if(document.getElementById(`ans-p3-${i}`).value.trim() === d.a) s3 += 0.5; document.getElementById(`exp-p3-${i}`).style.display = 'block'; });
+        p3Data.forEach((d, i) => { if(document.getElementById(`ans-p3-${i}`).value.trim() === d.a) s3 += 0.5; });
 
         document.getElementById('score-board').style.display = 'block';
         document.getElementById('final-score').innerText = (s1+s2+s3).toFixed(2);
         document.getElementById('score-detail').innerText = `P1: ${s1.toFixed(2)} | P2: ${s2.toFixed(2)} | P3: ${s3.toFixed(2)}`;
-        document.getElementById('submit-btn').style.display = 'none';
-        typesetMath();
+        
+        if(config.choXemDapAn) {
+            document.querySelectorAll('.explanation').forEach(el => el.style.display = 'block');
+            if(window.MathJax) MathJax.typeset();
+        } else {
+            document.getElementById('notice-msg').innerText = "Thầy chưa mở quyền xem lời giải chi tiết.";
+        }
+        window.scrollTo(0, document.body.scrollHeight);
     }
-
-    window.addEventListener('load', renderQuiz);
 </script>
 </body>
 </html>
