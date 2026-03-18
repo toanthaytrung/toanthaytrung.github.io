@@ -3,58 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khối 12 - Toán Thầy Trung</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Toán Thầy Trung - Khối 12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;450;600&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0a192f; color: #ccd6f6; font-family: 'Poppins', sans-serif; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 800px; width: 100%; background: rgba(255, 255, 255, 0.03); padding: 30px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); }
-        h1 { color: #64ffda; text-align: center; margin-bottom: 20px; }
-        .btn-back { display: inline-block; color: #64ffda; text-decoration: none; margin-bottom: 20px; font-size: 0.9em; }
-        .btn-back:hover { text-decoration: underline; }
+        :root { --bg: #0a192f; --container-bg: #112240; --text-main: #ccd6f6; --accent: #64ffda; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 600px; width: 100%; background: var(--container-bg); padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #233554; }
+        h1 { color: var(--accent); text-align: center; font-size: 1.8em; margin-bottom: 25px; }
         
-        /* Danh sách học liệu */
-        .resource-list { display: grid; gap: 15px; margin-top: 20px; }
-        .resource-item { 
-            background: #112240; padding: 20px; border-radius: 10px; 
-            display: flex; justify-content: space-between; align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s;
-        }
-        .resource-item:hover { border-color: #64ffda; transform: translateX(10px); }
-        .resource-info h3 { color: #fff; margin-bottom: 5px; font-size: 1.1em; }
-        .resource-info p { font-size: 0.8em; opacity: 0.7; }
-        .btn-download { 
-            background: #64ffda; color: #0a192f; padding: 8px 15px; 
-            border-radius: 5px; text-decoration: none; font-weight: 700; font-size: 0.8em;
-        }
+        /* Phần tra cứu điểm */
+        .search-box { background: #1d3557; padding: 20px; border-radius: 10px; margin-bottom: 30px; text-align: center; }
+        input { width: 80%; padding: 12px; border-radius: 5px; border: none; outline: none; font-size: 16px; margin-bottom: 10px; }
+        button { background: var(--accent); color: #0a192f; border: none; padding: 12px 25px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #fff; transform: translateY(-2px); }
+        #result { margin-top: 20px; padding: 15px; border-radius: 8px; background: rgba(100, 255, 218, 0.1); display: none; border: 1px dashed var(--accent); text-align: left; }
+        .res-item { margin-bottom: 8px; }
+        .res-label { font-weight: bold; color: var(--accent); }
+
+        /* Danh sách tài liệu và thi thử */
+        .topic-list { margin-top: 20px; }
+        .topic-item { background: #1d3557; padding: 15px; border-radius: 10px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--accent); }
+        .topic-item h3 { margin: 0; font-size: 1em; color: #fff; }
+        .btn-download { background: #233554; color: var(--accent); text-decoration: none; padding: 8px 15px; border-radius: 5px; font-size: 0.9em; border: 1px solid var(--accent); transition: 0.3s; }
+        .btn-download:hover { background: var(--accent); color: #0a192f; }
+        
+        .loading { display: none; color: var(--accent); margin-top: 10px; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Quay lại trang chủ</a>
-        <h1>Tài liệu Ôn thi Khối 12</h1>
-        <p style="text-align: center; opacity: 0.8;">Các em tải tài liệu và xem video hướng dẫn bên dưới nhé.</p>
+<div class="container">
+    <h1>TOÁN 12 - THẦY TRUNG</h1>
 
-        <div class="resource-list">
-            <div class="resource-item">
-                <div class="resource-info">
-                    <h3>Chuyên đề 4: Ứng dụng Tích Phân/h3>
-                    <p>File PDF - Tóm tắt lý thuyết và bài tập</p>
-                </div>
-                <a href="https://drive.google.com/file/d/1q98V2RXYcZUXiBzFnAStCsPxBNeD8RQ3/view?usp=sharing" class="btn-download">Tải về</a>
-            </div>
-
-            <div class="resource-item">
-                <div class="resource-item">
-                <div class="resource-info">
-                    <h3>Chuyên đề 2: Khối đa diện</h3>
-                    <p>Video bài giảng tương tác (iSpring)</p>
-                </div>
-                <a href="thithu.html" class="btn-download">Làm bài thi thử ngay</a>
-            </div>
-        </div>
+    <div class="search-box">
+        <p style="margin-top:0">Tra cứu kết quả học tập</p>
+        <input type="text" id="studentID" placeholder="Nhập mã số của em (VD: 1201)">
+        <button onclick="traCuu()">Xem kết quả</button>
+        <div id="loading" class="loading">Đang tìm kiếm dữ liệu...</div>
+        <div id="result"></div>
     </div>
+
+    <div class="topic-list">
+        
+        <div class="topic-item">
+            <h3>Chuyên đề: Ứng dụng Tích phân</h3>
+            <a href="#" class="btn-download">Xem bài giảng</a>
+        </div>
+
+        <div class="topic-item" style="background: #112240; border: 1px solid var(--accent);">
+            <div>
+                <h3 style="color: var(--accent);">Thi Thử Trắc Nghiệm 2026</h3>
+                <p style="font-size: 0.8em; color: #8892b0; margin: 5px 0 0 0;">Cấu trúc chuẩn Bộ GD&ĐT</p>
+            </div>
+            <a href="thithu.html" class="btn-download" style="background: var(--accent); color: #0a192f;">VÀO THI</a>
+        </div>
+
+    </div>
+
+    <button onclick="location.href='index.html'" style="margin-top: 25px; background:none; color:#8892b0; border:1px solid #233554; width:100%">Quay lại Trang chủ</button>
+</div>
+
+<script>
+    function traCuu() {
+        const maso = document.getElementById('studentID').value;
+        const loading = document.getElementById('loading');
+        const resultDiv = document.getElementById('result');
+        // Link Apps Script của thầy
+        const scriptURL = "https://script.google.com/macros/s/AKfycby5vlE0CesQlnjcs6Joo0i_G4oFF3xuIlFhTTPXN9pyjH-emLbLmHusf3ebsZFy3uA7/exec";
+
+        if (!maso) {
+            alert("Em vui lòng nhập mã số!");
+            return;
+        }
+
+        loading.style.display = 'block';
+        resultDiv.style.display = 'none';
+
+        fetch(`${scriptURL}?maso=${maso}`)
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                if (data.status === "success") {
+                    let html = `<div class="res-item"><span class="res-label">Họ tên:</span> ${data.ten}</div>`;
+                    
+                    // Tự động quét qua tất cả các cột dữ liệu thầy thêm trong Sheets
+                    if (data.details) {
+                        for (let key in data.details) {
+                            html += `<div class="res-item"><span class="res-label">${key}:</span> ${data.details[key]}</div>`;
+                        }
+                    } else {
+                        // Trường hợp dùng code cũ chưa có details
+                        html += `<div class="res-item"><span class="res-label">Điểm:</span> ${data.diem}</div>`;
+                        html += `<div class="res-item"><span class="res-label">Nhận xét:</span> ${data.nhanxet}</div>`;
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                    resultDiv.style.display = 'block';
+                } else {
+                    alert("Không tìm thấy mã số này trong danh sách lớp 12A1!");
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                alert("Lỗi kết nối! Em kiểm tra lại mạng nhé.");
+                console.error('Error!', error.message);
+            });
+    }
+</script>
 
 </body>
 </html>
