@@ -86,78 +86,67 @@
 </div>
 
 <script>
-    // --- CẤU HÌNH TỪ GIÁO VIÊN ---
-    const config = {
-        timeLimit: 90 * 60, // 90 phút (giây)
-        choXemDapAn: false, // Thầy đổi thành TRUE khi muốn hiện lời giải
-        maxAttempts: 1      // Số lần làm bài (hiện tại demo logic)
-    };
+   // --- KẾT NỐI GOOGLE SHEETS ---
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5vlE0CesQlnjcs6Joo0i_G4oFF3xuIlFhTTPXN9pyjH-emLbLmHusf3ebsZFy3uA7/exec"; // Thầy dán Link Apps Script vào đây
+let currentConfig = { choXemDapAn: false, maxAttempts: 1 };
 
-    const p1Data = [
-        { q: "Câu 1: Hàm số $y=x^3-3x+2$ đạt cực đại tại:", opts: ["$x=1$","$x=-1$","$x=2$","$x=0$"], a: 1, exp: "Đạo hàm $y'=3x^2-3=0 \\Leftrightarrow x=\\pm 1$. Bảng biến thiên cho thấy cực đại tại $x=-1$." }
-    ];
-    const p2Data = [
-        { q: "Câu 1: Cho hàm số $f(x) = x^4 - 2x^2 + 3$.", subs: ["Hàm số có 3 cực trị","Giá trị cực tiểu bằng 3","Hàm số chẵn","Đồng biến trên $(0;1)$"], a: [true, false, true, false], exp: "Cực tiểu là $f(\\pm 1)=2$. Hàm số chẵn vì $f(x)=f(-x)$." }
-    ];
-    const p3Data = [
-        { q: "Câu 1: Thể tích khối hộp chữ nhật kích thước 2, 3, 5 bằng bao nhiêu?", a: "30", exp: "$V = 2 \\times 3 \\times 5 = 30$." }
-    ];
+// Hàm bắt đầu thi (Thay thế hàm startExam cũ)
+async function startExam() {
+    const code = document.getElementById('studentCode').value.trim();
+    if(!code) return alert("Em nhập mã số đã nhé!");
 
-    let timerInterval;
-    let timeLeft = config.timeLimit;
-    let userP1 = {}, userP2 = {};
-
-    function startExam() {
-        const code = document.getElementById('studentCode').value;
-        if(!code) { alert("Em chưa nhập mã số!"); return; }
+    try {
+        // Gửi yêu cầu kiểm tra cấu hình và số lần làm bài lên Sheets
+        const res = await fetch(`${SCRIPT_URL}?action=getConfig&maso=${code}`);
+        const data = await res.json();
+        currentConfig = data;
         
+        if (currentConfig.usedAttempts >= currentConfig.maxAttempts) {
+            alert(`Em đã hết lượt làm bài (Đã làm: ${currentConfig.usedAttempts}/${currentConfig.maxAttempts} lần)`);
+            return;
+        }
+
         document.getElementById('login-box').style.display = 'none';
         document.getElementById('exam-container').style.display = 'block';
         document.getElementById('displayCode').innerText = code;
-        
         renderQuiz();
         startTimer();
+    } catch (e) {
+        alert("Lỗi kết nối máy chủ! Thầy chưa dán Link Script hoặc chưa Deploy đúng cách.");
+        console.error(e);
     }
+}
 
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            let mins = Math.floor(timeLeft / 60);
-            let secs = timeLeft % 60;
-            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            if(timeLeft <= 0) { clearInterval(timerInterval); chamDiem(); }
-            timeLeft--;
-        }, 1000);
+// Hàm nộp bài (Thay thế hàm chamDiem cũ)
+async function chamDiem() {
+    if(!confirm("Em chắc chắn muốn nộp bài?")) return;
+    clearInterval(timerInterval);
+    
+    let s1 = 0, s2 = 0, s3 = 0;
+    // ... (Giữ nguyên logic tính điểm s1, s2, s3 tùy theo số lượng câu hỏi của thầy) ...
+    
+    const tong = s1 + s2 + s3;
+    const maso = document.getElementById('displayCode').innerText;
+
+    // Ghi kết quả về Sheets
+    fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // Thêm dòng này để tránh lỗi bảo mật trình duyệt
+        body: JSON.stringify({ maso, s1, s2, s3, tong })
+    });
+
+    document.getElementById('score-board').style.display = 'block';
+    document.getElementById('final-score').innerText = tong.toFixed(2);
+    document.getElementById('score-detail').innerText = `P1: ${s1.toFixed(2)} | P2: ${s2.toFixed(2)} | P3: ${s3.toFixed(2)}`;
+    
+    if(currentConfig.choXemDapAn) {
+        document.querySelectorAll('.explanation').forEach(el => el.style.display = 'block');
+        if(window.MathJax) MathJax.typesetPromise();
+    } else {
+        document.getElementById('notice-msg').innerText = "Điểm đã được lưu thành công. Lời giải chi tiết sẽ hiện khi thầy kết thúc đợt thi.";
     }
-
-    function renderQuiz() {
-        document.getElementById('p1-content').innerHTML = p1Data.map((d, i) => `
-            <div class="question-card">
-                <div class="q-text">${d.q}</div>
-                <div class="options-grid">${d.opts.map((o, oi) => `<div class="opt-btn" onclick="selP1(${i},${oi},this)">${o}</div>`).join('')}</div>
-                <div class="explanation" id="exp-p1-${i}">${d.exp}</div>
-            </div>`).join('');
-        document.getElementById('p2-content').innerHTML = p2Data.map((d, i) => `
-            <div class="question-card">
-                <div class="q-text">${d.q}</div>
-                ${d.subs.map((s, si) => `<div class="tf-row"><span>${s}</span><div class="tf-btns">
-                    <button class="tf-btn" onclick="selP2(${i},${si},true,this)">Đúng</button>
-                    <button class="tf-btn" onclick="selP2(${i},${si},false,this)">Sai</button>
-                </div></div>`).join('')}
-                <div class="explanation" id="exp-p2-${i}">${d.exp}</div>
-            </div>`).join('');
-        document.getElementById('p3-content').innerHTML = p3Data.map((d, i) => `
-            <div class="question-card">
-                <div class="q-text">${d.q}</div>
-                <input type="text" class="short-input" id="ans-p3-${i}" placeholder="Đáp số...">
-                <div class="explanation" id="exp-p3-${i}">${d.exp}</div>
-            </div>`).join('');
-        if(window.MathJax) MathJax.typeset();
-    }
-
-    function selP1(q, o, btn) { userP1[q] = o; Array.from(btn.parentElement.children).forEach(b => b.classList.remove('selected')); btn.classList.add('selected'); }
-    function selP2(q, s, v, btn) { if(!userP2[q]) userP2[q] = {}; userP2[q][s] = v; Array.from(btn.parentElement.children).forEach(b => { b.classList.remove('s-true'); b.classList.remove('s-false'); }); btn.classList.add(v ? 's-true' : 's-false'); }
-
-    function chamDiem() {
+    window.scrollTo(0, document.body.scrollHeight);
+} {
         clearInterval(timerInterval);
         let s1 = 0, s2 = 0, s3 = 0;
 
