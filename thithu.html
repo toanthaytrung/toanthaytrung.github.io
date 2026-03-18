@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Thi Thử 2025 - Thầy Trung</title>
+    <title>Thi Thử Toán 12 - Thầy Trung</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;450;600&display=swap" rel="stylesheet">
     
     <script>
         window.MathJax = {
-            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] },
-            startup: { ready: () => { MathJax.startup.defaultReady(); } }
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            startup: {
+                ready: () => {
+                    MathJax.startup.defaultReady();
+                }
+            }
         };
     </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -17,158 +24,179 @@
     <style>
         :root { --bg: #0a192f; --card: #112240; --accent: #64ffda; --text: #ccd6f6; --white: #ffffff; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .exam-container { max-width: 900px; width: 100%; display: none; } /* Ẩn cho đến khi nhập mã */
+        .exam-container { max-width: 900px; width: 100%; display: none; margin-bottom: 50px; }
         
-        /* Form đăng nhập thi */
-        .login-box { background: var(--card); padding: 40px; border-radius: 15px; text-align: center; border: 1px solid var(--accent); margin-top: 50px; }
-        input[type="text"] { width: 100%; padding: 12px; margin: 15px 0; border-radius: 5px; border: 1px solid #233554; background: #0a192f; color: white; font-size: 1.1em; text-align: center; }
+        /* Form nhập mã số chuyên nghiệp */
+        .login-box { background: var(--card); padding: 40px; border-radius: 15px; text-align: center; border: 1px solid var(--accent); margin-top: 100px; max-width: 400px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .login-box input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 8px; border: 1px solid #233554; background: #0a192f; color: var(--accent); font-size: 1.2em; text-align: center; outline: none; box-sizing: border-box; }
         
-        /* Thanh trạng thái cố định */
-        .sticky-header { position: sticky; top: 0; background: rgba(10, 25, 47, 0.95); padding: 10px; border-bottom: 2px solid var(--accent); z-index: 100; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; }
+        .sticky-header { position: sticky; top: 0; background: rgba(10, 25, 47, 0.9); backdrop-filter: blur(10px); padding: 15px; border-bottom: 2px solid var(--accent); z-index: 100; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 900px; margin-bottom: 20px; border-radius: 0 0 15px 15px; }
         .timer { font-size: 1.5em; font-weight: bold; color: var(--accent); }
 
-        .section-header { background: #233554; color: var(--white); padding: 15px; border-radius: 8px; margin: 40px 0 20px; font-weight: 600; border-left: 5px solid var(--accent); }
-        .question-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #233554; }
+        .section-header { background: #233554; color: var(--white); padding: 15px; border-radius: 8px; margin: 30px 0 15px; font-weight: 600; border-left: 5px solid var(--accent); }
+        .question-card { background: var(--card); padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #233554; transition: 0.3s; }
         .q-text { font-size: 1.1em; color: var(--white); margin-bottom: 20px; line-height: 1.6; }
         
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .opt-btn { background: #0a192f; border: 1px solid #233554; color: var(--text); padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; }
-        .opt-btn.selected { background: var(--accent); color: #0a192f; font-weight: bold; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .opt-btn { background: #0a192f; border: 1px solid #233554; color: var(--text); padding: 15px; border-radius: 8px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .opt-btn:hover { border-color: var(--accent); }
+        .opt-btn.selected { background: var(--accent); color: #0a192f; font-weight: bold; border-color: var(--white); }
         
-        .tf-row { display: flex; justify-content: space-between; align-items: center; background: #0a192f; padding: 10px; margin-top: 8px; border-radius: 5px; }
-        .tf-btn { border: 1px solid #233554; background: none; color: #8892b0; padding: 5px 15px; border-radius: 4px; cursor: pointer; }
-        .tf-btn.s-true { background: #22c55e; color: white; }
-        .tf-btn.s-false { background: #ef4444; color: white; }
-
-        .short-input { width: 100%; padding: 12px; background: #0a192f; border: 1px solid var(--accent); color: white; border-radius: 5px; }
+        #submit-btn { width: 100%; padding: 20px; background: var(--accent); color: #0a192f; border: none; border-radius: 50px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 30px; box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3); }
         
-        #submit-btn { width: 100%; padding: 20px; background: var(--accent); color: #0a192f; border: none; border-radius: 50px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin-top: 40px; }
-        .explanation { display: none; margin-top: 15px; padding: 15px; background: #0a192f; border-left: 4px solid var(--accent); font-size: 0.9em; }
+        .explanation { display: none; margin-top: 20px; padding: 15px; background: #0a192f; border-left: 4px solid var(--accent); color: #a8b2d1; border-radius: 5px; line-height: 1.6; }
         
-        .score-board { display: none; background: var(--accent); color: #0a192f; padding: 30px; border-radius: 15px; text-align: center; margin-top: 40px; }
-        .score-num { font-size: 4em; font-weight: 800; margin: 0; }
-        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+        .score-board { display: none; background: var(--accent); color: #0a192f; padding: 30px; border-radius: 15px; text-align: center; margin-top: 40px; box-shadow: 0 0 50px rgba(100, 255, 218, 0.2); }
+        .score-num { font-size: 5em; font-weight: 800; margin: 0; }
+        
+        @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } .login-box { width: 90%; } }
     </style>
 </head>
 <body>
 
 <div id="login-box" class="login-box">
-    <h2 style="color: var(--accent)">HỆ THỐNG THI THỬ</h2>
-    <p>Nhập mã số học sinh để bắt đầu làm bài</p>
-    <input type="text" id="studentCode" placeholder="VD: 1201">
-    <button id="submit-btn" onclick="startExam()">BẮT ĐẦU THI</button>
+    <h1 style="color: var(--accent); margin: 0;">TOÁN THẦY TRUNG</h1>
+    <p style="opacity: 0.8;">Hệ thống thi thử trực tuyến 2025</p>
+    <input type="text" id="studentCode" placeholder="Nhập mã số của em...">
+    <button id="submit-btn" onclick="startExam()">BẮT ĐẦU LÀM BÀI</button>
 </div>
 
 <div id="exam-container" class="exam-container">
     <div class="sticky-header">
-        <div id="user-info" style="font-weight: bold;">Mã số: <span id="displayCode"></span></div>
+        <div style="font-weight: 600;">Học sinh: <span id="displayCode" style="color: var(--accent);"></span></div>
         <div class="timer" id="timer">90:00</div>
     </div>
 
-    <div class="section-header">PHẦN I. Câu trắc nghiệm 4 lựa chọn (3.0 điểm)</div>
+    <div class="section-header">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn</div>
     <div id="p1-content"></div>
-
-    <div class="section-header">PHẦN II. Câu trắc nghiệm Đúng/Sai (4.0 điểm)</div>
-    <div id="p2-content"></div>
-
-    <div class="section-header">PHẦN III. Câu trắc nghiệm trả lời ngắn (3.0 điểm)</div>
-    <div id="p3-content"></div>
 
     <button id="submit-btn" onclick="chamDiem()">NỘP BÀI THI</button>
 
     <div id="score-board" class="score-board">
-        <h3>KẾT QUẢ CỦA EM</h3>
-        <h2 class="score-num" id="final-score">0.00</h2>
-        <p id="score-detail"></p>
-        <p id="notice-msg" style="font-weight: bold; color: #d00000;"></p>
-        <button onclick="location.href='lop12.html'" style="padding: 10px 20px; cursor: pointer;">Quay lại</button>
+        <h2 style="margin: 0;">KẾT QUẢ CỦA EM</h2>
+        <h1 class="score-num" id="final-score">0.00</h1>
+        <p id="score-detail" style="font-weight: bold; font-size: 1.2em;"></p>
+        <p id="notice-msg" style="margin-top: 15px; font-style: italic; color: #333;"></p>
+        <button onclick="location.reload()" style="background: #0a192f; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Thoát</button>
     </div>
 </div>
 
 <script>
-   // --- KẾT NỐI GOOGLE SHEETS ---
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5vlE0CesQlnjcs6Joo0i_G4oFF3xuIlFhTTPXN9pyjH-emLbLmHusf3ebsZFy3uA7/exec"; // Thầy dán Link Apps Script vào đây
-let currentConfig = { choXemDapAn: false, maxAttempts: 1 };
+    // --- CẤU HÌNH KẾT NỐI ---
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5vlE0CesQlnjcs6Joo0i_G4oFF3xuIlFhTTPXN9pyjH-emLbLmHusf3ebsZFy3uA7/exec"; // QUAN TRỌNG: Dán link Script của thầy vào đây
+    
+    let currentConfig = { choXemDapAn: false, maxAttempts: 1 };
+    let timerInterval;
+    let timeLeft = 90 * 60; // 90 phút
+    let userP1 = {};
 
-// Hàm bắt đầu thi (Thay thế hàm startExam cũ)
-async function startExam() {
-    const code = document.getElementById('studentCode').value.trim();
-    if(!code) return alert("Em nhập mã số đã nhé!");
-
-    try {
-        // Gửi yêu cầu kiểm tra cấu hình và số lần làm bài lên Sheets
-        const res = await fetch(`${SCRIPT_URL}?action=getConfig&maso=${code}`);
-        const data = await res.json();
-        currentConfig = data;
-        
-        if (currentConfig.usedAttempts >= currentConfig.maxAttempts) {
-            alert(`Em đã hết lượt làm bài (Đã làm: ${currentConfig.usedAttempts}/${currentConfig.maxAttempts} lần)`);
-            return;
+    // --- DỮ LIỆU CÂU HỎI (Thầy tự thêm câu hỏi vào đây nhé) ---
+    const p1Data = [
+        { 
+            q: "Câu 1: Cho hàm số $y = x^3 - 3x + 2$. Điểm cực tiểu của đồ thị hàm số là:", 
+            opts: ["$A(1; 0)$", "$B(-1; 4)$", "$C(0; 2)$", "$D(1; 4)$"], 
+            a: 0, 
+            exp: "Giải: Ta có $y' = 3x^2 - 3$. Cho $y' = 0 \\Leftrightarrow x = \\pm 1$. Qua $x = 1$, $y'$ đổi dấu từ âm sang dương nên cực tiểu tại $(1;0)$." 
+        },
+        { 
+            q: "Câu 2: Thể tích khối chóp có diện tích đáy $B$ và chiều cao $h$ được tính theo công thức:", 
+            opts: ["$V = Bh$", "$V = \\frac{1}{3}Bh$", "$V = \\frac{1}{2}Bh$", "$V = 3Bh$"], 
+            a: 1, 
+            exp: "Giải: Theo công thức tính thể tích khối chóp: $V = \\frac{1}{3}B.h$." 
+        },
+        { 
+            q: "Câu 3: Nghiệm của phương trình $\\log_2(x-1) = 3$ là:", 
+            opts: ["$x=7$", "$x=10$", "$x=9$", "$x=8$"], 
+            a: 2, 
+            exp: "Giải: $x - 1 = 2^3 = 8 \\Leftrightarrow x = 9$." 
         }
+    ];
 
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('exam-container').style.display = 'block';
-        document.getElementById('displayCode').innerText = code;
-        renderQuiz();
-        startTimer();
-    } catch (e) {
-        alert("Lỗi kết nối máy chủ! Thầy chưa dán Link Script hoặc chưa Deploy đúng cách.");
-        console.error(e);
+    async function startExam() {
+        const code = document.getElementById('studentCode').value.trim();
+        if(!code) return alert("Em nhập mã số đã nhé!");
+
+        try {
+            // Bước 3: Kiểm tra cấu hình và số lần thi từ Sheets
+            const res = await fetch(`${SCRIPT_URL}?action=getConfig&maso=${code}`);
+            const data = await res.json();
+            currentConfig = data;
+            
+            if (currentConfig.usedAttempts >= currentConfig.maxAttempts) {
+                alert(`Em đã hết lượt làm bài (Đã làm: ${currentConfig.usedAttempts}/${currentConfig.maxAttempts} lần)`);
+                return;
+            }
+
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('exam-container').style.display = 'block';
+            document.getElementById('displayCode').innerText = code;
+            
+            renderQuiz();
+            startTimer();
+        } catch (e) {
+            alert("Lỗi kết nối! Thầy hãy kiểm tra lại Link Script và đảm bảo đã Deploy ở chế độ 'Anyone'.");
+        }
     }
-}
 
-// Hàm nộp bài (Thay thế hàm chamDiem cũ)
-async function chamDiem() {
-    if(!confirm("Em chắc chắn muốn nộp bài?")) return;
-    clearInterval(timerInterval);
-    
-    let s1 = 0, s2 = 0, s3 = 0;
-    // ... (Giữ nguyên logic tính điểm s1, s2, s3 tùy theo số lượng câu hỏi của thầy) ...
-    
-    const tong = s1 + s2 + s3;
-    const maso = document.getElementById('displayCode').innerText;
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            document.getElementById('timer').innerText = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            if(timeLeft <= 0) { clearInterval(timerInterval); chamDiem(); }
+            timeLeft--;
+        }, 1000);
+    }
 
-    // Ghi kết quả về Sheets
-    fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", // Thêm dòng này để tránh lỗi bảo mật trình duyệt
-        body: JSON.stringify({ maso, s1, s2, s3, tong })
-    });
-
-    document.getElementById('score-board').style.display = 'block';
-    document.getElementById('final-score').innerText = tong.toFixed(2);
-    document.getElementById('score-detail').innerText = `P1: ${s1.toFixed(2)} | P2: ${s2.toFixed(2)} | P3: ${s3.toFixed(2)}`;
-    
-    if(currentConfig.choXemDapAn) {
-        document.querySelectorAll('.explanation').forEach(el => el.style.display = 'block');
+    function renderQuiz() {
+        document.getElementById('p1-content').innerHTML = p1Data.map((d, i) => `
+            <div class="question-card">
+                <div class="q-text">${d.q}</div>
+                <div class="options-grid">
+                    ${d.opts.map((o, oi) => `<div class="opt-btn" onclick="selP1(${i},${oi},this)">${o}</div>`).join('')}
+                </div>
+                <div class="explanation" id="exp-p1-${i}"><b>Lời giải:</b> ${d.exp}</div>
+            </div>
+        `).join('');
         if(window.MathJax) MathJax.typesetPromise();
-    } else {
-        document.getElementById('notice-msg').innerText = "Điểm đã được lưu thành công. Lời giải chi tiết sẽ hiện khi thầy kết thúc đợt thi.";
     }
-    window.scrollTo(0, document.body.scrollHeight);
-} {
+
+    function selP1(qIdx, oIdx, btn) {
+        userP1[qIdx] = oIdx;
+        Array.from(btn.parentElement.children).forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    async function chamDiem() {
+        if(!confirm("Em có chắc chắn muốn nộp bài không?")) return;
         clearInterval(timerInterval);
-        let s1 = 0, s2 = 0, s3 = 0;
-
-        p1Data.forEach((d, i) => { if(userP1[i] === d.a) s1 += 0.25; });
-        p2Data.forEach((d, i) => {
-            let count = 0;
-            d.a.forEach((ans, si) => { if(userP2[i] && userP2[i][si] === ans) count++; });
-            if(count === 1) s2 += 0.1; else if(count === 2) s2 += 0.25; else if(count === 3) s2 += 0.5; else if(count === 4) s2 += 1.0;
-        });
-        p3Data.forEach((d, i) => { if(document.getElementById(`ans-p3-${i}`).value.trim() === d.a) s3 += 0.5; });
-
-        document.getElementById('score-board').style.display = 'block';
-        document.getElementById('final-score').innerText = (s1+s2+s3).toFixed(2);
-        document.getElementById('score-detail').innerText = `P1: ${s1.toFixed(2)} | P2: ${s2.toFixed(2)} | P3: ${s3.toFixed(2)}`;
         
-        if(config.choXemDapAn) {
+        let score = 0;
+        p1Data.forEach((d, i) => {
+            if(userP1[i] === d.a) score += (10 / p1Data.length);
+        });
+
+        const maso = document.getElementById('displayCode').innerText;
+
+        // Ghi điểm về Sheets
+        fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({ maso: maso, s1: score.toFixed(2), s2: 0, s3: 0, tong: score.toFixed(2) })
+        });
+
+        // Hiển thị kết quả
+        document.getElementById('score-board').style.display = 'block';
+        document.getElementById('final-score').innerText = score.toFixed(2);
+        
+        if(currentConfig.choXemDapAn) {
             document.querySelectorAll('.explanation').forEach(el => el.style.display = 'block');
-            if(window.MathJax) MathJax.typeset();
+            if(window.MathJax) MathJax.typesetPromise();
         } else {
-            document.getElementById('notice-msg').innerText = "Thầy chưa mở quyền xem lời giải chi tiết.";
+            document.getElementById('notice-msg').innerText = "Thầy đã nhận điểm. Lời giải sẽ được mở sau khi hết giờ thi.";
         }
-        window.scrollTo(0, document.body.scrollHeight);
+        
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 </script>
 </body>
